@@ -1,5 +1,5 @@
 {
-    "name": "gitaminhq/uploader",
+    "name": "phecho/uploader",
     "description": "Uploader for Laravel",
     "keywords": ["ajax", "gitamin", "upload", "file", "image", "laravel"],
     "license": "MIT",
