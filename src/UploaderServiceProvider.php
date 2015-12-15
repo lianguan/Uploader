@@ -1,11 +1,20 @@
-<?php 
+<?php
+
+/*
+ * This file is part of Gitamin.
+ *
+ * Copyright (C) 2015-2016 The Gitamin Team
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Gitamin\Uploader;
 
 use Illuminate\Support\ServiceProvider;
 
-class UploaderServiceProvider extends ServiceProvider {
-
+class UploaderServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -30,12 +39,11 @@ class UploaderServiceProvider extends ServiceProvider {
             'namespace' => 'Gitamin\Uploader',
         ];
 
-        if($this->app['config']->get('uploader.middleware'))
-        {
+        if ($this->app['config']->get('uploader.middleware')) {
             $routeConfig['middleware'] = $this->app['config']->get('uploader.middleware');
         }
 
-        $this->app['router']->group($routeConfig, function($router) {
+        $this->app['router']->group($routeConfig, function ($router) {
             $router->any($this->app['config']->get('uploader.route', 'uploader').'/{type?}', [
                 'uses' => 'UploaderController@index',
                 'as' => 'uploader',
@@ -62,5 +70,4 @@ class UploaderServiceProvider extends ServiceProvider {
     {
         return [];
     }
-
 }

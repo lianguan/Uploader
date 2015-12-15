@@ -1,4 +1,14 @@
-<?php 
+<?php
+
+/*
+ * This file is part of Gitamin.
+ *
+ * Copyright (C) 2015-2016 The Gitamin Team
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Gitamin\Uploader;
 
 use Illuminate\Http\Request;
@@ -9,7 +19,6 @@ use Intervention\Image\Facades\Image;
 
 class UploaderController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -22,38 +31,34 @@ class UploaderController extends Controller
 
         $configType = Config::get('uploader.types.'.$type);
 
-        if ( ! $configType )
-        {
-            return [ 'error' => 'type-not-found' ];
+        if (! $configType) {
+            return ['error' => 'type-not-found'];
         }
 
         // Check if file is uploaded
-        if ( ! Input::hasFile('file') )
-        {
-            return [ 'error' => 'file-not-found' ];
+        if (! Input::hasFile('file')) {
+            return ['error' => 'file-not-found'];
         }
 
-        $file  = Input::file('file');
+        $file = Input::file('file');
 
         // get file size in Bytes
         $file_size = $file->getSize();
 
         // Check the file size
-        if ( $file_size > $config['max_size'] * 1024 || ( isset($configType['max_size']) && $file_size > $configType['max_size'] * 1024 ) )
-        {
-            return [ 'error' => 'limit-size' ];
+        if ($file_size > $config['max_size'] * 1024 || (isset($configType['max_size']) && $file_size > $configType['max_size'] * 1024)) {
+            return ['error' => 'limit-size'];
         }
 
         // get the extension
-        $ext = strtolower( $file->getClientOriginalExtension() );
+        $ext = strtolower($file->getClientOriginalExtension());
 
         // checking file format
         $format = $this->getFileFormat($ext);
 
         // TODO: check file format
-        if( isset($configType['format']) && ! in_array($format, explode('|', $configType['format'])) )
-        {
-            return [ 'error' => 'invalid-format' ];
+        if (isset($configType['format']) && ! in_array($format, explode('|', $configType['format']))) {
+            return ['error' => 'invalid-format'];
         }
 
         // saving file
@@ -62,14 +67,11 @@ class UploaderController extends Controller
 
         $file_path = $config['dir'].'/'.$type.'/'.$filename.'.'.$ext;
 
-        if ( $format == 'image' && isset($config['types'][$type]['image']) && count($config['types'][$type]['image']) )
-        {
-
+        if ($format == 'image' && isset($config['types'][$type]['image']) && count($config['types'][$type]['image'])) {
             $img = Image::make(public_path().'/'.$file_path);
 
-            foreach($config['types'][$type]['image'] as $task => $params)
-            {
-                switch($task) {
+            foreach ($config['types'][$type]['image'] as $task => $params) {
+                switch ($task) {
                     case 'resize':
                         $img->resize($params[0], $params[1]);
                         break;
@@ -82,8 +84,7 @@ class UploaderController extends Controller
                     case 'thumbs':
                         $img->save();
 
-                        foreach($params as $name => $sizes) {
-                            
+                        foreach ($params as $name => $sizes) {
                             $img->backup();
 
                             $thumb_path = $config['dir'].'/'.$filename.'-'.$name.'.'.$ext;
@@ -112,28 +113,20 @@ class UploaderController extends Controller
             'name' => $filename,
             'path' => $file_path,
         ];
-
     }
 
-    protected function getFileFormat($ext) {
-        if ( preg_match('/(jpg|jpeg|gif|png)/', $ext) )
-        {
+    protected function getFileFormat($ext)
+    {
+        if (preg_match('/(jpg|jpeg|gif|png)/', $ext)) {
             return 'image';
-        }
-        elseif( preg_match( '/(mp3|wav|ogg)/', $ext) )
-        {
+        } elseif (preg_match('/(mp3|wav|ogg)/', $ext)) {
             return 'audio';
-        }
-        elseif( preg_match( '/(mp4|wmv|flv)/', $ext) )
-        {
+        } elseif (preg_match('/(mp4|wmv|flv)/', $ext)) {
             return 'video';
-        }
-        elseif( preg_match('/txt/', $ext) )
-        {
+        } elseif (preg_match('/txt/', $ext)) {
             return 'text';
         }
-        
+
         return 'other';
     }
-
 }
