@@ -31,7 +31,7 @@ class UploaderServiceProvider extends ServiceProvider
     {
         // Publish config files
         $this->publishes([
-            __DIR__.'/config/config.php' => config_path('uploader.php'),
+            __DIR__.'/config/uploader.php' => config_path('uploader.php'),
         ], 'config');
 
         // Define the route
@@ -45,7 +45,7 @@ class UploaderServiceProvider extends ServiceProvider
 
         $this->app['router']->group($routeConfig, function ($router) {
             $router->any($this->app['config']->get('uploader.route', 'uploader').'/{type?}', [
-                'uses' => 'UploaderController@index',
+                'uses' => 'UploaderController@indexAction',
                 'as' => 'uploader',
             ]);
         });

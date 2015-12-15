@@ -24,7 +24,7 @@ class UploaderController extends Controller
      *
      * @return Response
      */
-    public function index(Request $request, $type = 'default')
+    public function indexAction(Request $request, $type = 'default')
     {
         // Get the configuration
         $config = Config::get('uploader');
@@ -36,11 +36,11 @@ class UploaderController extends Controller
         }
 
         // Check if file is uploaded
-        if (! Input::hasFile('file')) {
+        if (! \Input::hasFile($config['file_field'])) {
             return ['error' => 'file-not-found'];
         }
 
-        $file = Input::file('file');
+        $file = \Input::file($config['file_field']);
 
         // get file size in Bytes
         $file_size = $file->getSize();
@@ -101,17 +101,19 @@ class UploaderController extends Controller
         }
 
         return [
-            'original' => [
-                'name' => $file->getClientOriginalName(),
-                'size' => $file_size,
+            'data' => [
+                'original' => [
+                    'name' => $file->getClientOriginalName(),
+                    'size' => $file_size,
+                ],
+                'ext' => $ext,
+                'format' => $format,
+                // 'image' => [
+                //     'size' =>$img->getSize(),
+                // ],
+                'name' => $filename,
+                'path' => $file_path,
             ],
-            'ext' => $ext,
-            'format' => $format,
-            // 'image' => [
-            //     'size' =>$img->getSize(),
-            // ],
-            'name' => $filename,
-            'path' => $file_path,
         ];
     }
 
