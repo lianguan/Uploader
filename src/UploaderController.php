@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gitamin\Uploader;
+namespace Phecho\Uploader;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

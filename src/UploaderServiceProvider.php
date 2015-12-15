@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gitamin\Uploader;
+namespace Phecho\Uploader;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -36,7 +36,7 @@ class UploaderServiceProvider extends ServiceProvider
 
         // Define the route
         $routeConfig = [
-            'namespace' => 'Gitamin\Uploader',
+            'namespace' => 'Phecho\Uploader',
         ];
 
         if ($this->app['config']->get('uploader.middleware')) {

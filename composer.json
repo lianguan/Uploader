@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Gitamin\\Uploader\\": "src/"
+            "Phecho\\Uploader\\": "src/"
         }
     },
     "config": {
