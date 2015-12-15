@@ -1,0 +1,32 @@
+{
+    "name": "gitaminhq/uploader",
+    "description": "Uploader for Laravel",
+    "keywords": ["ajax", "gitamin", "upload", "file", "image", "laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "The Gitamin Team",
+            "email": "support@gitamin.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "5.*",
+        "intervention/image": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gitamin\\Uploader\\": "src/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
