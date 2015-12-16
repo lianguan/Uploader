@@ -32,22 +32,22 @@ class UploaderController extends Controller
         $configType = Config::get('uploader.types.'.$type);
 
         if (! $configType) {
-            return ['error' => 'type-not-found'];
+            return ['error' => 'invalid_type'];
         }
 
         // Check if file is uploaded
-        if (! \Input::hasFile($config['file_field'])) {
-            return ['error' => 'file-not-found'];
+        if (! $request->hasFile($config['file_field'])) {
+            return ['error' => 'file_not_exists'];
         }
 
-        $file = \Input::file($config['file_field']);
+        $file = $request->file($config['file_field']);
 
         // get file size in Bytes
         $file_size = $file->getSize();
 
         // Check the file size
         if ($file_size > $config['max_size'] * 1024 || (isset($configType['max_size']) && $file_size > $configType['max_size'] * 1024)) {
-            return ['error' => 'limit-size'];
+            return ['error' => 'limit_size'];
         }
 
         // get the extension
@@ -58,7 +58,7 @@ class UploaderController extends Controller
 
         // TODO: check file format
         if (isset($configType['format']) && ! in_array($format, explode('|', $configType['format']))) {
-            return ['error' => 'invalid-format'];
+            return ['error' => 'invalid_format'];
         }
 
         // saving file
